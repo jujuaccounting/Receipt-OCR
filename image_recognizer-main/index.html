@@ -102,15 +102,15 @@
         
                 if (file.webkitRelativePath.includes('/match/')) {
                     xs.push(await preprocessImage(file));
-                    ys.push([1, 0]); // Label for "planet"
+                    ys.push([1, 0]); // Label for "receipt"
                 } else if (file.webkitRelativePath.includes('/not_match/')) {
                     xs.push(await preprocessImage(file));
-                    ys.push([0, 1]); // Label for "not planet"
+                    ys.push([0, 1]); // Label for "not receipt"
                 }
             }
         
             if (xs.length === 0 || ys.length === 0) {
-                alert('No valid training data found. Please ensure your folders contain images in "planet" and "not_planet" subfolders.');
+                alert('No valid training data found. Please ensure your folders contain images in "match" and "not_match" subfolders.');
                 return null;
             }
         
@@ -142,7 +142,7 @@
             model.add(tf.layers.maxPooling2d({ poolSize: 2 }));
             model.add(tf.layers.flatten());
             model.add(tf.layers.dense({ units: 64, activation: 'relu' }));
-            model.add(tf.layers.dense({ units: 2, activation: 'softmax' })); // 2 classes: planet and not planet
+            model.add(tf.layers.dense({ units: 2, activation: 'softmax' })); // 2 classes: receipt and not receipt
         
             // Compile the model
             model.compile({
@@ -205,7 +205,7 @@
                     tensor.dispose();
                     prediction.dispose();
         
-                    predictionResult.textContent = predictionArray[0] > predictionArray[1] ? 'Category' : 'Not in Category';
+                    predictionResult.textContent = predictionArray[1] > predictionArray[0] ? 'Category' : 'Not in Category';
         
                     // Displays image output string as paragraph content
                     reader.extractImage(file).then(() => {
